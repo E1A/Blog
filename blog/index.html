@@ -1,0 +1,38 @@
+---
+layout: default
+title: Blog
+description: Overview of all posts
+---
+
+<div class="page-header">
+  <h1>Blog</h1>
+  <p class="page-subtitle">Research notes, writeups, and experiments.</p>
+</div>
+
+<div class="post-grid">
+  {% assign posts = site.blog | sort: "date" | reverse %}
+  {% for post in posts %}
+    <article class="post-card">
+      <h2 class="post-title">
+        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+      </h2>
+
+      <div class="post-meta">
+        <span class="post-date">{{ post.date | date: "%Y-%m-%d" }}</span>
+        {% if post.tags %}
+          <span class="post-tags">
+            {% for t in post.tags %}
+              <span class="tag">{{ t }}</span>
+            {% endfor %}
+          </span>
+        {% endif %}
+      </div>
+
+      <p class="post-desc">
+        {{ post.description | default: post.excerpt | strip_html | truncate: 220 }}
+      </p>
+
+      <a class="post-readmore" href="{{ post.url | relative_url }}">Read</a>
+    </article>
+  {% endfor %}
+</div>

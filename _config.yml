@@ -1,0 +1,28 @@
+title: "Research Blog"
+description: "Writeups and research."
+url: "https://e1a.nl"
+baseurl: ""
+
+timezone: "Europe/Amsterdam"
+
+markdown: kramdown
+highlighter: rouge
+permalink: pretty
+
+collections:
+  blog:
+    output: true
+    permalink: /blog/:name/
+
+defaults:
+  - scope:
+      path: ""
+      type: "blog"
+    values:
+      layout: "blog_post"
+
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+excerpt_separator: "<!--more-->"
