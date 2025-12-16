@@ -1,20 +1,8 @@
 ---
-title: Test Blog
+title: Placeholder
 date: 2025-12-15
-description: Test Blog
+description: Placeholder
 tags: [webdav, ntlm, windows]
 ---
 
-This is a placeholder post.
-
-# Test
-Test Blog
-
-## Code blocks
-
-```bash
-ls; whoami; cd .. | grep -v idk
-```
-
-### idk
-idk
+This is a placeholder post, this will soon be used for an actual blogpost but currently not active.
