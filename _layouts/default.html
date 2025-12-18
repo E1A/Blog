@@ -7,6 +7,8 @@
     <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
     <meta name="description" content="{{ page.description | default: site.description | escape }}">
 
+    <link rel="icon" href="{{ '/favicon.ico' | relative_url }}" type="image/x-icon">
+
     <link rel="stylesheet" href="{{ '/assets/css/site.css' | relative_url }}">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
@@ -32,12 +34,158 @@
       </div>
     </footer>
 
+    <div id="img-modal" class="img-modal" aria-hidden="true">
+      <button id="img-modal-close" class="img-modal-close" type="button" aria-label="Close image">×</button>
+      <img id="img-modal-img" alt="">
+    </div>
+
+    <script>
+    (function(){
+      const modal = document.getElementById('img-modal');
+      if(!modal) return;
+
+      const modalImg = document.getElementById('img-modal-img');
+      const closeBtn = document.getElementById('img-modal-close');
+      let lastActive = null;
+
+      function setCaption(el, text){
+        const parts = String(text || '').split(/`([^`]+)`/g);
+        for(let i = 0; i < parts.length; i++){
+          if(parts[i] === '') continue;
+          if(i % 2 === 1){
+            const code = document.createElement('code');
+            code.textContent = parts[i];
+            el.appendChild(code);
+          } else {
+            el.appendChild(document.createTextNode(parts[i]));
+          }
+        }
+      }
+
+      function openModal(img){
+        lastActive = document.activeElement;
+        modalImg.src = img.currentSrc || img.src;
+        modalImg.alt = img.alt || '';
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.documentElement.style.overflow = 'hidden';
+        closeBtn.focus();
+      }
+
+      function closeModal(){
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+        modalImg.removeAttribute('src');
+        document.documentElement.style.overflow = '';
+        if(lastActive && lastActive.focus) lastActive.focus();
+      }
+
+      closeBtn.addEventListener('click', closeModal);
+      modal.addEventListener('click', (e) => { if(e.target === modal) closeModal(); });
+      document.addEventListener('keydown', (e) => {
+        if(e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+      });
+
+      document.querySelectorAll('.post-content img').forEach((img) => {
+        const alt = (img.getAttribute('alt') || '').trim();
+        const inLink = !!img.closest('a');
+        const inFigure = !!img.closest('figure');
+
+        if(alt && !inLink && !inFigure){
+          const fig = document.createElement('figure');
+          fig.className = 'post-figure';
+          img.parentNode.insertBefore(fig, img);
+          fig.appendChild(img);
+
+          const cap = document.createElement('figcaption');
+          cap.className = 'post-figcaption';
+          setCaption(cap, alt);
+          fig.appendChild(cap);
+        }
+
+        img.tabIndex = 0;
+
+        img.addEventListener('click', () => {
+          if(img.closest('a')) return;
+          openModal(img);
+        });
+
+        img.addEventListener('keydown', (e) => {
+          if((e.key === 'Enter' || e.key === ' ') && !img.closest('a')){
+            e.preventDefault();
+            openModal(img);
+          }
+        });
+      });
+    })();
+    </script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/powershell.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js"></script>
-    <script>hljs.highlightAll();</script>
+    <script>
+      hljs.highlightAll();
+
+      (function(){
+        function getCodeText(block){
+          const code = block.querySelector('code');
+          const text = code ? code.innerText : block.innerText;
+          return text.replace(/\n$/, '');
+        }
+
+        async function copyText(text){
+          if(navigator.clipboard && navigator.clipboard.writeText){
+            await navigator.clipboard.writeText(text);
+            return;
+          }
+
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.setAttribute('readonly', '');
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          ta.style.left = '-9999px';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+        }
+
+        document.querySelectorAll('.post-content pre').forEach((pre) => {
+          let block = pre;
+          if(pre.parentElement && pre.parentElement.classList && pre.parentElement.classList.contains('highlight')){
+            block = pre.parentElement;
+          }
+
+          if(block.closest('.code-wrap')) return;
+
+          const wrap = document.createElement('div');
+          wrap.className = 'code-wrap';
+          block.parentNode.insertBefore(wrap, block);
+          wrap.appendChild(block);
+
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'code-copy-btn';
+          btn.textContent = 'Copy';
+
+          btn.addEventListener('click', async () => {
+            const prev = btn.textContent;
+            try{
+              await copyText(getCodeText(block));
+              btn.textContent = 'Copied';
+            } catch(e){
+              btn.textContent = 'Failed';
+            }
+            setTimeout(() => { btn.textContent = prev; }, 1200);
+          });
+
+          wrap.appendChild(btn);
+        });
+      })();
+    </script>
   </body>
 </html>

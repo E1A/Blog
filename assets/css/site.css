@@ -198,6 +198,12 @@ a:hover{ text-decoration: underline; }
   color: var(--text);
 }
 
+.post-content hr{
+  margin: 22px 0;
+  border: 0;
+  border-top: 1px solid rgba(231, 173, 23, 0.25);
+}
+
 /* Inline code */
 .post-content code{
   font-family: var(--mono);
@@ -246,4 +252,112 @@ a:hover{ text-decoration: underline; }
 .post-content th{
   color: var(--accent);
   background: rgba(0,0,0,0.16);
+}
+
+.post-content figure{
+  margin: 14px 0;
+}
+
+.post-content figcaption{
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+.post-content img{
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border-radius: 12px;
+  border: 1px solid rgba(231, 173, 23, 0.18);
+  cursor: zoom-in;
+}
+
+.img-modal{
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background: rgba(0,0,0,0.82);
+  z-index: 9999;
+}
+
+.img-modal.open{
+  display: flex;
+}
+
+.img-modal img{
+  max-width: 98vw;
+  max-height: 96vh;
+  width: auto;
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(231, 173, 23, 0.22);
+  box-shadow: 0 18px 60px rgba(0,0,0,0.55);
+  transform: scale(0.92);
+  transition: transform 120ms ease-out;
+}
+
+.img-modal.open img{
+  transform: scale(1);
+}
+
+.img-modal-close{
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(39,39,38,0.90);
+  border: 1px solid rgba(231, 173, 23, 0.25);
+  color: var(--text);
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.img-modal-close:hover{
+  color: var(--accent);
+}
+
+.code-wrap{
+  position: relative;
+  margin: 14px 0;
+}
+
+.code-wrap pre{
+  margin: 0;
+}
+
+.code-wrap .highlight{
+  margin: 0;
+}
+
+.code-copy-btn{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: rgba(39,39,38,0.90);
+  border: 1px solid rgba(231, 173, 23, 0.25);
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.code-copy-btn:hover{
+  color: var(--accent);
+}
+
+.code-copy-btn:focus{
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(231, 173, 23, 0.25);
 }
