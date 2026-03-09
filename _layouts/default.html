@@ -30,7 +30,7 @@
 
     <footer class="site-footer">
       <div class="container">
-        <span>© {{ site.time | date: "%Y" }} {{ site.title }}</span>
+        <span>© {{ site.time | date: "%Y" }} - E1A</span>
       </div>
     </footer>
 
@@ -184,6 +184,52 @@
           });
 
           wrap.appendChild(btn);
+        });
+      })();
+
+      (function(){
+        function titleCase(s){
+          if(!s) return s;
+          return s.charAt(0).toUpperCase() + s.slice(1);
+        }
+
+        function stripCalloutMarkerFromFirstParagraph(firstP){
+          const re = /^\s*\[![a-zA-Z]+\]\s*/;
+
+          const firstNode = firstP.firstChild;
+          if(firstNode && firstNode.nodeType === Node.TEXT_NODE){
+            const t = firstNode.textContent || '';
+            if(re.test(t)){
+              firstNode.textContent = t.replace(re, '');
+              return;
+            }
+          }
+
+          firstP.innerHTML = (firstP.innerHTML || '').replace(re, '');
+        }
+
+        document.querySelectorAll('.post-content blockquote').forEach((bq) => {
+          const firstP = bq.querySelector(':scope > p');
+          if(!firstP) return;
+
+          const raw = (firstP.textContent || '');
+          const m = raw.match(/^\s*\[!([a-zA-Z]+)\]/);
+          if(!m) return;
+
+          const type = (m[1] || '').toLowerCase();
+
+          bq.classList.add('callout', 'callout-' + type);
+
+          const title = document.createElement('div');
+          title.className = 'callout-title';
+          title.textContent = titleCase(type);
+          bq.insertBefore(title, bq.firstChild);
+
+          stripCalloutMarkerFromFirstParagraph(firstP);
+
+          if((firstP.textContent || '').trim() === ''){
+            firstP.remove();
+          }
         });
       })();
     </script>

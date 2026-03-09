@@ -91,12 +91,13 @@ a:hover{ text-decoration: underline; }
 }
 
 .post-grid{
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 16px;
 }
 
 .post-card{
+  width: 100%;
   background: var(--panel);
   border-radius: var(--radius);
   padding: 16px 16px 14px;
@@ -196,6 +197,37 @@ a:hover{ text-decoration: underline; }
   background: rgba(0,0,0,0.15);
   border-radius: 10px;
   color: var(--text);
+}
+
+.post-content blockquote.callout{
+  padding: 12px 14px;
+  border-left: 4px solid var(--callout-color, var(--accent));
+  background: rgba(0,0,0,0.18);
+}
+
+.post-content blockquote.callout-info{
+  --callout-color: var(--accent);
+}
+
+.post-content blockquote.callout-tip{
+  --callout-color: #4aa3ff;
+}
+
+.post-content blockquote.callout-warning{
+  --callout-color: #ff4d4d;
+}
+
+.post-content blockquote.callout .callout-title{
+  color: var(--callout-color, var(--accent));
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin: 0 0 8px;
+}
+
+.post-content blockquote.callout p:first-of-type{
+  margin-top: 0;
 }
 
 .post-content hr{
