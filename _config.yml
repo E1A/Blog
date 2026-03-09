@@ -9,6 +9,14 @@ markdown: kramdown
 highlighter: rouge
 permalink: pretty
 
+plugins:
+  - jekyll-feed
+
+feed:
+  collections:
+    blog:
+      path: /blog/feed.xml
+
 collections:
   blog:
     output: true
