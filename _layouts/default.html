@@ -22,6 +22,7 @@
         <a class="brand" href="{{ '/blog/' | relative_url }}">{{ site.title }}</a>
         <nav class="nav">
           <a href="{{ '/blog/' | relative_url }}">Blog</a>
+          <a href="{{ '/cheatsheets/' | relative_url }}">Cheatsheets</a>
           <a href="{{ '/feed.xml' | relative_url }}">RSS</a>
         </nav>
       </div>
@@ -214,8 +215,19 @@
           return s.charAt(0).toUpperCase() + s.slice(1);
         }
 
+        function parseCalloutHeader(text){
+          const firstLine = String(text || '').split(/\r?\n/, 1)[0];
+          const m = firstLine.match(/^\s*\[!([a-zA-Z0-9_-]+)\](?:\s+(.*))?\s*$/);
+          if(!m) return null;
+
+          return {
+            type: (m[1] || '').toLowerCase(),
+            customTitle: (m[2] || '').trim()
+          };
+        }
+
         function stripCalloutMarkerFromFirstParagraph(firstP){
-          const re = /^\s*\[![a-zA-Z]+\]\s*/;
+          const re = /^\s*\[![a-zA-Z0-9_-]+\][^\n\r]*(?:\r?\n)?\s*/;
 
           const firstNode = firstP.firstChild;
           if(firstNode && firstNode.nodeType === Node.TEXT_NODE){
@@ -234,16 +246,17 @@
           if(!firstP) return;
 
           const raw = (firstP.textContent || '');
-          const m = raw.match(/^\s*\[!([a-zA-Z]+)\]/);
-          if(!m) return;
+          const header = parseCalloutHeader(raw);
+          if(!header) return;
 
-          const type = (m[1] || '').toLowerCase();
+          const type = header.type;
+          const customTitle = header.customTitle;
 
           bq.classList.add('callout', 'callout-' + type);
 
           const title = document.createElement('div');
           title.className = 'callout-title';
-          title.textContent = titleCase(type);
+          title.textContent = customTitle || titleCase(type);
           bq.insertBefore(title, bq.firstChild);
 
           stripCalloutMarkerFromFirstParagraph(firstP);

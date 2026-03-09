@@ -1,0 +1,46 @@
+---
+layout: default
+title: Cheatsheets
+description: Some cheatsheets
+---
+
+<div class="page-header">
+  <h1>Cheatsheets</h1>
+  <p class="page-subtitle">Quick reference notes in markdown.</p>
+</div>
+
+<div class="post-grid">
+  {% assign sheets = site.cheatsheets | sort: "date" | reverse %}
+  {% if sheets.size > 0 %}
+    {% for sheet in sheets %}
+      <article class="post-card">
+        <h2 class="post-title">
+          <a href="{{ sheet.url | relative_url }}">{{ sheet.title }}</a>
+        </h2>
+
+        <div class="post-meta">
+          {% if sheet.date %}
+            <span class="post-date">{{ sheet.date | date: "%Y-%m-%d" }}</span>
+          {% endif %}
+          {% if sheet.tags %}
+            <span class="post-tags">
+              {% for t in sheet.tags %}
+                <span class="tag">{{ t }}</span>
+              {% endfor %}
+            </span>
+          {% endif %}
+        </div>
+
+        <p class="post-desc">
+          {{ sheet.description | default: sheet.excerpt | strip_html | truncate: 220 }}
+        </p>
+
+        <a class="post-readmore" href="{{ sheet.url | relative_url }}">Open</a>
+      </article>
+    {% endfor %}
+  {% else %}
+    <article class="post-card">
+      <h2 class="post-title">Why are you looking here?</h2>
+    </article>
+  {% endif %}
+</div>

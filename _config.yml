@@ -22,6 +22,9 @@ collections:
   blog:
     output: true
     permalink: /blog/:name/
+  cheatsheets:
+    output: true
+    permalink: /cheatsheets/:name/
 
 defaults:
   - scope:
@@ -29,6 +32,11 @@ defaults:
       type: "blog"
     values:
       layout: "blog_post"
+  - scope:
+      path: ""
+      type: "cheatsheets"
+    values:
+      layout: "cheatsheet_post"
 
 kramdown:
   input: GFM

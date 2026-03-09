@@ -256,6 +256,10 @@ a:hover{ text-decoration: underline; }
   --callout-color: #ff4d4d;
 }
 
+.post-content blockquote.callout-example{
+  --callout-color: #b084ff;
+}
+
 .post-content blockquote.callout .callout-title{
   color: var(--callout-color, var(--accent));
   font-weight: 800;
