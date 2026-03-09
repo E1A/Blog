@@ -13,9 +13,10 @@ plugins:
   - jekyll-feed
 
 feed:
+  path: /posts-feed.xml
   collections:
     blog:
-      path: /blog/feed.xml
+      path: /feed.xml
 
 collections:
   blog:
