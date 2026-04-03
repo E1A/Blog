@@ -89,8 +89,8 @@ rbcd.py -delegate-to 'dc2$' $domain/administrator -hashes : -dc-ip $dc -action f
 >- [Guide](https://medium.com/@offsecdeer/ntlmv1-domain-compromise-9bd8dd7e9891#:~:text=on%20domain%20escalation.-,DC%20Relay,-If%20we%20can)
 >- [SourceV2](https://trustedsec.com/blog/practical-attacks-against-ntlmv1)
 
->[!warning]
->When you can't create a machine account but do have the NT hash of a machine account you can use pth under normal circumstance. But if the domain has disabled “weak” Kerberos algorithm, then RC4 (hash/pth) won't work with tickets. You can try to reset the password of the computer accounts with ksetup so that the DC (and you) have AES keys for that ticket.
+>[!tip]
+>If you don't have a machine account, then you can [sacrafice an user](https://www.thehacker.recipes/ad/movement/kerberos/delegations/rbcd#rbcd-on-spn-less-users) like this [example](https://github.com/mael91620/Barbhack-2025-AD-writeup?tab=readme-ov-file#flag4---first-hard-challenge---ntlmv1-relay-to-ldap-and-spn-less-rbcd).
 
 &nbsp;
 
